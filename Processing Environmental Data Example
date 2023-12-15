@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load environmental data from a CSV file
+def load_environmental_data(file_path):
+    try:
+        data = pd.read_csv(file_path)
+        return data
+    except FileNotFoundError:
+        print("File not found. Please provide a valid file path.")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+# Analyze and visualize environmental data
+def analyze_environmental_data(data):
+    if data is not None:
+        # Display basic information about the dataset
+        print("Dataset information:")
+        print(data.info())
+        print("\nSummary statistics:")
+        print(data.describe())
+
+        # Visualize environmental parameters (example: temperature and humidity)
+        plt.figure(figsize=(10, 6))
+        plt.scatter(data['Temperature'], data['Humidity'], alpha=0.5)
+        plt.xlabel('Temperature')
+        plt.ylabel('Humidity')
+        plt.title('Temperature vs Humidity')
+        plt.grid(True)
+        plt.show()
+    else:
+        print("No data available for analysis.")
+
+if __name__ == "__main__":
+    # Replace 'path/to/environmental_data.csv' with the actual file path
+    file_path = 'path/to/environmental_data.csv'
+    
+    # Load environmental data
+    environmental_data = load_environmental_data(file_path)
+    
+    # Analyze and visualize environmental data
+    analyze_environmental_data(environmental_data)
