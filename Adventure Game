@@ -1,0 +1,112 @@
+import random
+
+# Player class to store player's attributes
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 100
+        self.inventory = []
+        self.current_location = 'town'
+
+    def __str__(self):
+        return f"{self.name} (Health: {self.health})"
+
+# Locations and their descriptions
+locations = {
+    'town': 'You are in the town square.',
+    'forest': 'You are in a dense forest.',
+    'cave': 'You have entered a dark cave.',
+    'castle': 'You stand before a majestic castle.',
+    'river': 'You are by a serene river.'
+}
+
+# Quests and their descriptions
+quests = {
+    'treasure_hunt': 'Find the hidden treasure in the cave.',
+    'rescue_princess': 'Rescue the princess trapped in the castle.'
+}
+
+# Function to handle player movement
+def move_player(player, direction):
+    if direction in locations.keys():
+        player.current_location = direction
+        print(locations[direction])
+    else:
+        print("Invalid direction!")
+
+# Function to explore the current location
+def explore_location(player):
+    print(locations[player.current_location])
+
+    # Random events at different locations
+    if player.current_location == 'forest':
+        event = "You encountered a wild animal!"
+        player.health -= random.randint(10, 30)
+    elif player.current_location == 'cave':
+        event = "You found a hidden treasure chest!"
+        player.inventory.append("treasure")
+    elif player.current_location == 'castle':
+        event = "You see the princess locked in a tower."
+    elif player.current_location == 'river':
+        event = "You found a boat."
+    else:
+        event = "Nothing remarkable here."
+
+    print(event)
+
+# Function to handle player's interaction with quests
+def quest_interaction(player, quest):
+    if quest == 'treasure_hunt' and 'treasure' in player.inventory:
+        print("Congratulations! You found the hidden treasure.")
+        player.inventory.remove('treasure')
+    elif quest == 'rescue_princess' and player.current_location == 'castle':
+        print("You rescued the princess!")
+    else:
+        print("You cannot complete this quest yet.")
+
+# Main game function
+def play_game():
+    print("Welcome to the Adventure Game!\n")
+
+    player_name = input("Enter your name: ")
+    player = Player(player_name)
+
+    print(f"\nWelcome, {player.name}!")
+    print("You embark on an epic adventure. Explore and complete quests to progress.\n")
+
+    while player.health > 0:
+        print(f"Current Location: {player.current_location}")
+        print("== Options ==")
+        print("1. Move to a different location")
+        print("2. Explore current location")
+        print("3. Check Inventory")
+        print("4. Check Quests")
+        print("5. Quit")
+
+        choice = input("Enter your choice (1-5): ")
+
+        if choice == '1':
+            direction = input("Enter direction (town, forest, cave, castle, river): ")
+            move_player(player, direction)
+        elif choice == '2':
+            explore_location(player)
+        elif choice == '3':
+            print(f"Inventory: {', '.join(player.inventory)}")
+        elif choice == '4':
+            print("Quests:")
+            for q, desc in quests.items():
+                print(f"{q.capitalize()}: {desc}")
+            selected_quest = input("Enter the quest you want to interact with: ")
+            quest_interaction(player, selected_quest)
+        elif choice == '5':
+            print("Thank you for playing!")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+        if player.health <= 0:
+            print("Game Over! Your health reached zero.")
+            break
+
+if __name__ == "__main__":
+    play_game()
