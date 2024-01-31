@@ -1,0 +1,45 @@
+import requests
+import json
+
+def fetch_data(url):
+    """Fetch data from the specified URL and return it as a JSON object."""
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f"Failed to fetch data: {response.status_code}")
+
+def parse_data(data):
+    """Parse the JSON data and return a list of dictionaries."""
+    parsed_data = []
+    for item in data:
+        parsed_item = {
+            'name': item['name'],
+            'population': item['population'],
+            'area': item['area'],
+            'gini': item['gini']
+        }
+        parsed_data.append(parsed_item)
+    return parsed_data
+
+def generate_report(data):
+    """Generate a summary report."""
+    print("Summary Report")
+    print("--------------")
+    for item in data:
+        print(f"Country: {item['name']}")
+        print(f"Population: {item['population']:,}")
+        print(f"Area: {item['area']:,} sq km")
+        print(f"Gini Coefficient: {item['gini']:.2f}")
+        print()
+
+if __name__ == '__main__':
+    # Fetch data from the API
+    url = "https://restcountries.eu/rest/v2/all"
+    data = fetch_data(url)
+
+    # Parse the JSON data
+    parsed_data = parse_data(data)
+
+    # Generate a summary report
+    generate_report(parsed_data)
