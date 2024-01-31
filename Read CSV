@@ -1,0 +1,44 @@
+import csv
+
+def read_csv_file(file_name):
+    """Read data from a CSV file and return a list of dictionaries."""
+    data = []
+    with open(file_name, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            data.append(row)
+    return data
+
+def calculate_totals(data):
+    """Calculate the total quantity and cost for each product."""
+    totals = {}
+    for row in data:
+        product = row['Product']
+        quantity = float(row['Quantity'])
+        cost = float(row['Cost'])
+        if product not in totals:
+            totals[product] = {'quantity': 0, 'cost': 0.0}
+        totals[product]['quantity'] += quantity
+        totals[product]['cost'] += cost
+    return totals
+
+def generate_report(totals):
+    """Generate a summary report."""
+    print("Summary Report")
+    print("--------------")
+    for product, values in totals.items():
+        print(f"Product: {product}")
+        print(f"Quantity: {values['quantity']:.2f}")
+        print(f"Cost: ${values['cost']:.2f}")
+        print(f"Average Cost: ${values['cost'] / values['quantity']:.2f}")
+        print()
+
+if __name__ == '__main__':
+    # Read data from a CSV file
+    data = read_csv_file('data.csv')
+
+    # Calculate the total quantity and cost for each product
+    totals = calculate_totals(data)
+
+    # Generate a summary report
+    generate_report(totals)
